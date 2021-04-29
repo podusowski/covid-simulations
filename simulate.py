@@ -98,13 +98,11 @@ def simulate_single_day(population, data):
     date = datetime.date.fromisoformat(data["date"])
 
     # Kill some infected people.
-    population.debug = True
     population.affect(
         number(data["new_deaths"]),
-        lambda person: person.infected,
+        lambda person: person.alive and person.infected,
         lambda person: person._replace(alive=False),
     )
-    population.debug = False
 
     # Infect some people.
     population.affect(
