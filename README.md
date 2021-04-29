@@ -15,3 +15,8 @@ Things that might cause the numbers to be underestimated:
 - In many countries, people in the risk groups were prioritized to take the jabs
   first. This means that these people were overrepresented in the vaccinated
   subpopulation.
+
+
+Data
+----
+The data was taken from https://ourworldindata.org/

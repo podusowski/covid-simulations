@@ -94,7 +94,7 @@ def simulate_single_day(population, data):
 
     # Infect some people.
     population.affect(
-        int(float(data["new_cases"])),
+        number(data["new_cases"]),
         lambda person: person.alive
         and not person.infected
         and not protected(person, date),
