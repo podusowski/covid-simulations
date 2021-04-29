@@ -1,7 +1,8 @@
 import csv
-from typing import NamedTuple
+from typing import NamedTuple, Optional
 from collections import defaultdict
 import copy
+from datetime import date
 
 
 POPULATION = 37846605
@@ -51,6 +52,7 @@ class Population:
 class Person(NamedTuple):
     infected: bool = False
     alive: bool = True
+    vaccinated: Optional[date] = None
 
 
 def number(cell: str) -> int:
@@ -82,8 +84,9 @@ def main():
         # Show the stats.
         cases = population.count(lambda person: person.infected)
         deaths = population.count(lambda person: not person.alive)
+        vaccinated = population.count(lambda person: person.vaccinated is not None)
 
-        print(day["date"], cases, deaths)
+        print(day["date"], cases, deaths, vaccinated)
 
 
 if __name__ == "__main__":
