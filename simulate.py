@@ -4,6 +4,9 @@ from collections import defaultdict
 import copy
 
 
+POPULATION = 37846605
+
+
 def read_covid_cases_data():
     with open("owid-covid-data.csv", "r") as f:
         reader = csv.DictReader(f)
@@ -37,10 +40,19 @@ class Population:
         new_kind = transform(old_kind)
         self._buckets[new_kind] += size
 
+    def count(self, match):
+        return sum([size for kind, size in self._buckets.items() if match(kind)])
+
+
+class Person(NamedTuple):
+    infected: bool = False
+
 
 def main():
+    population = Population(size=POPULATION, people_factory=Person)
     for day in read_covid_cases_data():
         print(day["date"])
+        print(day)
 
 
 if __name__ == "__main__":
@@ -70,11 +82,14 @@ def test_population():
     population.affect(3, underaged, grow_up)
     assert 7 == len([p.age for p in population if p.age == 1])
     assert 3 == len([p.age for p in population if p.age == 18])
+    assert 7 == population.count(underaged)
 
     population.affect(3, underaged, grow_up)
     assert 4 == len([p.age for p in population if p.age == 1])
     assert 6 == len([p.age for p in population if p.age == 18])
+    assert 4 == population.count(underaged)
 
     population.affect(4, underaged, grow_up)
     assert 0 == len([p.age for p in population if p.age == 1])
     assert 10 == len([p.age for p in population if p.age == 18])
+    assert 0 == population.count(underaged)
