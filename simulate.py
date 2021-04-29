@@ -53,8 +53,13 @@ class Population:
                     return features
 
         for _ in range(size):
-            n = random.randrange(0, subpopulations_size)
-            old_features = features(n)
+            # Pick some dude from the all subpopulations as if they were flattened out.
+            position = random.randrange(0, subpopulations_size)
+
+            # Find out what subpopulation the dude was in.
+            old_features = features(position)
+
+            # And finally move him around.
             self._subpopulations[old_features] -= 1
             new_features = transform(old_features)
             self._subpopulations[new_features] += 1
@@ -74,8 +79,17 @@ def number(cell: str) -> int:
 
 
 def protected(person: Person, today: datetime.date) -> bool:
+    """Whether someone is protected from the infection."""
     if person.vaccinated is None:
         return False
+
+    # The two weeks are taken from CDC:
+    #
+    # https://www.cdc.gov/coronavirus/2019-ncov/vaccines/keythingstoknow.html
+    #
+    # On one side, this doesn't take into account a partial protection someone might have earlier
+    # than that. On the other hand, it assumes that everyone is fully protected after a first dose,
+    # which obviously isn't true.
     return (today - person.vaccinated).days > 14
 
 
