@@ -20,24 +20,26 @@ def read_covid_cases_data():
 
 class Population:
     def __init__(self, size, people_factory):
-        self.debug = False
-        self._buckets = defaultdict(lambda: 0)
-        self._buckets[people_factory()] = size
+        self._subpopulations = defaultdict(lambda: 0)
+        self._subpopulations[people_factory()] = size
 
     def __len__(self):
-        return sum([size for size in self._buckets.values()])
+        return sum([size for size in self._subpopulations.values()])
 
     def __iter__(self):
-        for kind, size in self._buckets.items():
+        for feature, size in self._subpopulations.items():
             for _ in range(size):
-                yield copy.copy(kind)
+                yield copy.copy(feature)
 
     def affect(self, size, match, transform):
+        """Affect (``transform`` in some way) ``size`` people with features matching ``match``."""
         if not size:
             return  # Function would throw otherwise.
 
         # Loop below modifies the buckets so we save what's important earlier.
-        buckets = [(kind, size) for kind, size in self._buckets.items() if match(kind)]
+        buckets = [
+            (kind, size) for kind, size in self._subpopulations.items() if match(kind)
+        ]
         maching_people = sum(size for _, size in buckets)
         assert buckets
 
@@ -50,12 +52,12 @@ class Population:
         for _ in range(size):
             n = random.randrange(0, maching_people)
             old_kind = bucket(n)
-            self._buckets[old_kind] -= 1
+            self._subpopulations[old_kind] -= 1
             new_kind = transform(old_kind)
-            self._buckets[new_kind] += 1
+            self._subpopulations[new_kind] += 1
 
     def count(self, match):
-        return sum([size for kind, size in self._buckets.items() if match(kind)])
+        return sum(size for kind, size in self._subpopulations.items() if match(kind))
 
 
 class Person(NamedTuple):
