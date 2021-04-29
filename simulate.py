@@ -84,6 +84,12 @@ def simulate_single_day(population, data):
         lambda person: person._replace(infected=True),
     )
 
+    # Vaccinate
+    population.affect(
+        number(data["new_vaccinations"]),
+        lambda person: person.alive and not person.infected,
+        lambda person: person._replace(vaccinated=date),
+    )
 
 def main():
     population = Population(size=POPULATION, people_factory=Person)
