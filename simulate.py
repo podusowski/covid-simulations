@@ -10,12 +10,8 @@ import argparse
 
 
 def read_covid_cases_data(location):
-    # https://covid.ourworldindata.org/data/owid-covid-data.csv
     with open("owid-covid-data.csv", "r") as f:
-        reader = csv.DictReader(f)
-        for row in reader:
-            if row["location"] == location:
-                yield row
+        yield from [row for row in csv.DictReader(f) if row["location"] == location]
 
 
 def number(cell: str) -> int:
