@@ -1,6 +1,7 @@
 This COVID-19 simulation is trying to asses how many vaccinated people might
 still get infected and die before the immunity system fully kicks in.
 
+
 Limitations
 -----------
 There are number of limitations that you should be aware of before interpreting
