@@ -1,5 +1,7 @@
 from simulate import Population
 from typing import NamedTuple
+import math
+from math import isclose
 
 
 class Person(NamedTuple):
@@ -48,21 +50,31 @@ def test_population():
 
 
 def test_that_affect_is_truly_randomized():
-    population = Population(100, Person)
+    population = Population(1_000_000, Person)
 
     # Create two equally big subpopulations.
-    population.affect(50, underaged, grow_up)
+    population.affect(500_000, underaged, grow_up)
 
     # Only underages have different sex. 🤷
-    population.affect(25, underaged, lambda person: person._replace(female=True))
+    population.affect(250_000, underaged, lambda person: person._replace(female=True))
 
     # Go Thanos style.
-    population.affect(50, lambda _: True, kill)
+    population.affect(500_000, lambda _: True, kill)
 
     # Both subpopulations should be affected equally. See the TODO in the implementation.
-    assert 24 == population.count(lambda person: underaged(person) and not person.alive)
-    assert 25 == population.count(
-        lambda person: not underaged(person) and not person.alive
+    assert isclose(
+        250_000,
+        population.count(lambda person: underaged(person) and not person.alive),
+        rel_tol=0.1,
+    )
+    assert isclose(
+        250_000,
+        population.count(lambda person: not underaged(person) and not person.alive),
+        rel_tol=0.1,
     )
 
-    assert 12 == population.count(lambda person: person.female and not person.alive)
+    assert isclose(
+        125_000,
+        population.count(lambda person: person.female and not person.alive),
+        rel_tol=0.1,
+    )

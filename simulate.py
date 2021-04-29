@@ -3,6 +3,7 @@ import datetime
 from typing import NamedTuple, Optional
 from collections import defaultdict
 import copy
+import random
 
 
 POPULATION = 37846605
@@ -19,6 +20,7 @@ def read_covid_cases_data():
 
 class Population:
     def __init__(self, size, people_factory):
+        self.debug = False
         self._buckets = defaultdict(lambda: 0)
         self._buckets[people_factory()] = size
 
@@ -39,14 +41,18 @@ class Population:
         maching_people = sum(size for _, size in buckets)
         assert buckets
 
-        for old_kind, bucket_size in buckets:
-            # TODO: Probably should account for non-zero remainder.
-            share = bucket_size / maching_people
-            amount = int(share * size)
-            assert self._buckets[old_kind] >= amount
-            self._buckets[old_kind] -= amount
+        def bucket(n):
+            for kind, size in buckets:
+                n -= size
+                if n <= 0:
+                    return kind
+
+        for _ in range(size):
+            n = random.randrange(0, maching_people)
+            old_kind = bucket(n)
+            self._buckets[old_kind] -= 1
             new_kind = transform(old_kind)
-            self._buckets[new_kind] += amount
+            self._buckets[new_kind] += 1
 
     def count(self, match):
         return sum([size for kind, size in self._buckets.items() if match(kind)])
@@ -73,11 +79,13 @@ def simulate_single_day(population, data):
     date = datetime.date.fromisoformat(data["date"])
 
     # Kill some infected people.
+    population.debug = True
     population.affect(
         number(data["new_deaths"]),
         lambda person: person.infected,
         lambda person: person._replace(alive=False),
     )
+    population.debug = False
 
     # Infect some people.
     population.affect(
