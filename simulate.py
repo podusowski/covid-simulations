@@ -9,7 +9,7 @@ import itertools
 import argparse
 
 
-def read_covid_cases_data(location):
+def read_country_data(location):
     with open("owid-covid-data.csv", "r") as f:
         yield from [row for row in csv.DictReader(f) if row["location"] == location]
 
@@ -116,7 +116,7 @@ def main():
     parser.add_argument("--location", default="Poland")
     args = parser.parse_args()
 
-    it = iter(read_covid_cases_data(args.location))
+    it = iter(read_country_data(args.location))
     first = next(it)
     population = Population(size=number(first["population"]), people_factory=Person)
     for data in itertools.chain([first], it):
