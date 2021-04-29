@@ -33,17 +33,19 @@ class Population:
         if not size:
             return  # Function would throw otherwise.
 
-        def find_kind():
-            for kind in self._buckets.keys():
-                if match(kind):
-                    return kind
-            raise RuntimeError(f"{match} did not match anything")
+        # Loop below modifies the buckets so we save what's important earlier.
+        buckets = [(kind, size) for kind, size in self._buckets.items() if match(kind)]
+        maching_people = sum(size for _, size in buckets)
+        assert buckets
 
-        old_kind = find_kind()
-        assert self._buckets[old_kind] >= size
-        self._buckets[old_kind] -= size
-        new_kind = transform(old_kind)
-        self._buckets[new_kind] += size
+        for old_kind, bucket_size in buckets:
+            # TODO: Probably should account for non-zero remainder.
+            share = bucket_size / maching_people
+            amount = int(share * size)
+            assert self._buckets[old_kind] >= amount
+            self._buckets[old_kind] -= amount
+            new_kind = transform(old_kind)
+            self._buckets[new_kind] += amount
 
     def count(self, match):
         return sum([size for kind, size in self._buckets.items() if match(kind)])

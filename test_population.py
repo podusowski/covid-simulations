@@ -2,10 +2,25 @@ from simulate import Population
 from typing import NamedTuple
 
 
-def test_population():
-    class Person(NamedTuple):
-        age: int = 1
+class Person(NamedTuple):
+    age: int = 1
+    alive: bool = True
+    female: bool = False
 
+
+def underaged(person):
+    return person.age < 18
+
+
+def grow_up(person):
+    return person._replace(age=18)
+
+
+def kill(person):
+    return person._replace(alive=False)
+
+
+def test_population():
     population = Population(10, Person)
     assert 10 == len(population)
 
@@ -14,12 +29,6 @@ def test_population():
 
     assert 10 == len([p.age for p in population if p.age == 1])
     assert 0 == len([p.age for p in population if p.age == 18])
-
-    def underaged(person):
-        return person.age < 18
-
-    def grow_up(person):
-        return Person(age=18)
 
     # Can change someone.
     population.affect(3, underaged, grow_up)
@@ -36,3 +45,24 @@ def test_population():
     assert 0 == len([p.age for p in population if p.age == 1])
     assert 10 == len([p.age for p in population if p.age == 18])
     assert 0 == population.count(underaged)
+
+
+def test_that_affect_is_truly_randomized():
+    population = Population(100, Person)
+
+    # Create two equally big subpopulations.
+    population.affect(50, underaged, grow_up)
+
+    # Only underages have different sex. 🤷
+    population.affect(25, underaged, lambda person: person._replace(female=True))
+
+    # Go Thanos style.
+    population.affect(50, lambda _: True, kill)
+
+    # Both subpopulations should be affected equally. See the TODO in the implementation.
+    assert 24 == population.count(lambda person: underaged(person) and not person.alive)
+    assert 25 == population.count(
+        lambda person: not underaged(person) and not person.alive
+    )
+
+    assert 12 == population.count(lambda person: person.female and not person.alive)
