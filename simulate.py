@@ -6,17 +6,15 @@ from collections import defaultdict
 import copy
 import random
 import itertools
+import argparse
 
 
-POPULATION = 37_846_605
-
-
-def read_covid_cases_data():
+def read_covid_cases_data(location):
     # https://covid.ourworldindata.org/data/owid-covid-data.csv
     with open("owid-covid-data.csv", "r") as f:
         reader = csv.DictReader(f)
         for row in reader:
-            if row["location"] == "Poland":
+            if row["location"] == location:
                 yield row
 
 
@@ -118,7 +116,11 @@ def simulate_single_day(population, data):
 
 
 def main():
-    it = iter(read_covid_cases_data())
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--location", default="Poland")
+    args = parser.parse_args()
+
+    it = iter(read_covid_cases_data(args.location))
     first = next(it)
     population = Population(size=number(first["population"]), people_factory=Person)
     for data in itertools.chain([first], it):
