@@ -1,6 +1,5 @@
 import csv
 import datetime
-from types import SimpleNamespace
 from typing import NamedTuple, Optional
 from collections import defaultdict
 import copy
