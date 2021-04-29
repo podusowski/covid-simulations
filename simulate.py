@@ -29,10 +29,14 @@ class Population:
                 yield copy.copy(kind)
 
     def affect(self, size, match, transform):
+        if not size:
+            return  # Function would throw otherwise.
+
         def find_kind():
             for kind in self._buckets.keys():
                 if match(kind):
                     return kind
+            raise RuntimeError(f"{match} did not match anything")
 
         old_kind = find_kind()
         assert self._buckets[old_kind] >= size
@@ -46,20 +50,40 @@ class Population:
 
 class Person(NamedTuple):
     infected: bool = False
+    alive: bool = True
+
+
+def number(cell: str) -> int:
+    return int(float(cell)) if cell else 0
+
+
+def simulate_single_day(population, data):
+    #print(data)
+    # Kill some infected people.
+    population.affect(
+        number(data["new_deaths"]),
+        lambda person: person.infected,
+        lambda person: person._replace(alive=False),
+    )
+
+    # Infect some people.
+    population.affect(
+        int(float(data["new_cases"])),
+        lambda person: not person.infected,
+        lambda person: person._replace(infected=True),
+    )
 
 
 def main():
     population = Population(size=POPULATION, people_factory=Person)
     for day in read_covid_cases_data():
-        # Infect some people.
-        population.affect(
-            int(float(day["new_cases"])),
-            lambda person: not person.infected,
-            lambda person: person._replace(infected=True),
-        )
+        simulate_single_day(population, day)
 
         # Show the stats.
-        print(day["date"], population.count(lambda person: person.infected))
+        cases = population.count(lambda person: person.infected)
+        deaths = population.count(lambda person: not person.alive)
+
+        print(day["date"], cases, deaths)
 
 
 if __name__ == "__main__":
