@@ -10,6 +10,7 @@ POPULATION = 37846605
 
 
 def read_covid_cases_data():
+    # https://covid.ourworldindata.org/data/owid-covid-data.csv
     with open("owid-covid-data.csv", "r") as f:
         reader = csv.DictReader(f)
         for row in reader:
@@ -63,6 +64,7 @@ def number(cell: str) -> int:
 
 
 def protected(person: Person, today: datetime.date) -> bool:
+    # return person.va
     return False
 
 
@@ -84,12 +86,13 @@ def simulate_single_day(population, data):
         lambda person: person._replace(infected=True),
     )
 
-    # Vaccinate
+    # Vaccinate.
     population.affect(
         number(data["new_vaccinations"]),
         lambda person: person.alive and not person.infected,
         lambda person: person._replace(vaccinated=date),
     )
+
 
 def main():
     population = Population(size=POPULATION, people_factory=Person)
@@ -103,6 +106,9 @@ def main():
                 deaths=population.count(lambda person: not person.alive),
                 vaccinated=population.count(
                     lambda person: person.vaccinated is not None
+                ),
+                vaccinated_but_infected=population.count(
+                    lambda person: person.vaccinated is not None and person.infected
                 ),
             )
         )
