@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 import csv
 import datetime
 from typing import NamedTuple, Optional
@@ -116,7 +117,9 @@ def simulate_single_day(population, data):
     # Vaccinate.
     population.affect(
         number(data["new_vaccinations"]),
-        lambda person: person.alive and not person.infected,
+        lambda person: person.alive
+        and not person.infected
+        and person.vaccinated is None,
         lambda person: person._replace(vaccinated=date),
     )
 
