@@ -5,6 +5,7 @@ from typing import NamedTuple, Optional
 from collections import defaultdict
 import copy
 import random
+import itertools
 
 
 POPULATION = 37_846_605
@@ -17,6 +18,10 @@ def read_covid_cases_data():
         for row in reader:
             if row["location"] == "Poland":
                 yield row
+
+
+def number(cell: str) -> int:
+    return int(float(cell)) if cell else 0
 
 
 class Population:
@@ -75,10 +80,6 @@ class Person(NamedTuple):
     vaccinated: Optional[datetime.date] = None
 
 
-def number(cell: str) -> int:
-    return int(float(cell)) if cell else 0
-
-
 def protected(person: Person, today: datetime.date) -> bool:
     """Whether someone is protected from the infection."""
     if person.vaccinated is None:
@@ -117,8 +118,10 @@ def simulate_single_day(population, data):
 
 
 def main():
-    population = Population(size=POPULATION, people_factory=Person)
-    for data in read_covid_cases_data():
+    it = iter(read_covid_cases_data())
+    first = next(it)
+    population = Population(size=number(first["population"]), people_factory=Person)
+    for data in itertools.chain([first], it):
         simulate_single_day(population, data)
 
         print(
