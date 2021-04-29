@@ -83,14 +83,6 @@ def protected(person: Person, today: datetime.date) -> bool:
     """Whether someone is protected from the infection."""
     if person.vaccinated is None:
         return False
-
-    # The two weeks are taken from CDC:
-    #
-    # https://www.cdc.gov/coronavirus/2019-ncov/vaccines/keythingstoknow.html
-    #
-    # On one side, this doesn't take into account a partial protection someone might have earlier
-    # than that. On the other hand, it assumes that everyone is fully protected after a first dose,
-    # which obviously isn't true.
     return (today - person.vaccinated).days > 14
 
 
