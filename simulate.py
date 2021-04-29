@@ -36,25 +36,28 @@ class Population:
         if not size:
             return  # Function would throw otherwise.
 
-        # Loop below modifies the buckets so we save what's important earlier.
-        buckets = [
-            (kind, size) for kind, size in self._subpopulations.items() if match(kind)
+        # There might be multiple subpopulations matching the requested features.
+        subpopulations = [
+            (features, size)
+            for features, size in self._subpopulations.items()
+            if match(features)
         ]
-        maching_people = sum(size for _, size in buckets)
-        assert buckets
+        subpopulations_size = sum(size for _, size in subpopulations)
 
-        def bucket(n):
-            for kind, size in buckets:
-                n -= size
-                if n <= 0:
-                    return kind
+        assert subpopulations
+
+        def features(position):
+            for features, size in subpopulations:
+                position -= size
+                if position <= 0:
+                    return features
 
         for _ in range(size):
-            n = random.randrange(0, maching_people)
-            old_kind = bucket(n)
-            self._subpopulations[old_kind] -= 1
-            new_kind = transform(old_kind)
-            self._subpopulations[new_kind] += 1
+            n = random.randrange(0, subpopulations_size)
+            old_features = features(n)
+            self._subpopulations[old_features] -= 1
+            new_features = transform(old_features)
+            self._subpopulations[new_features] += 1
 
     def count(self, match):
         return sum(size for kind, size in self._subpopulations.items() if match(kind))
