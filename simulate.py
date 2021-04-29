@@ -51,8 +51,15 @@ class Person(NamedTuple):
 def main():
     population = Population(size=POPULATION, people_factory=Person)
     for day in read_covid_cases_data():
-        print(day["date"])
-        print(day)
+        # Infect some people.
+        population.affect(
+            int(float(day["new_cases"])),
+            lambda person: not person.infected,
+            lambda person: person._replace(infected=True),
+        )
+
+        # Show the stats.
+        print(day["date"], population.count(lambda person: person.infected))
 
 
 if __name__ == "__main__":
