@@ -1,8 +1,9 @@
 import csv
+import datetime
+from types import SimpleNamespace
 from typing import NamedTuple, Optional
 from collections import defaultdict
 import copy
-from datetime import date
 
 
 POPULATION = 37846605
@@ -54,15 +55,21 @@ class Population:
 class Person(NamedTuple):
     infected: bool = False
     alive: bool = True
-    vaccinated: Optional[date] = None
+    vaccinated: Optional[datetime.date] = None
 
 
 def number(cell: str) -> int:
     return int(float(cell)) if cell else 0
 
 
+def protected(person: Person, today: datetime.date) -> bool:
+    return False
+
+
 def simulate_single_day(population, data):
     # print(data)
+    date = datetime.date.fromisoformat(data["date"])
+
     # Kill some infected people.
     population.affect(
         number(data["new_deaths"]),
@@ -73,7 +80,7 @@ def simulate_single_day(population, data):
     # Infect some people.
     population.affect(
         int(float(data["new_cases"])),
-        lambda person: not person.infected,
+        lambda person: not person.infected and not protected(person, date),
         lambda person: person._replace(infected=True),
     )
 
@@ -83,12 +90,16 @@ def main():
     for day in read_covid_cases_data():
         simulate_single_day(population, day)
 
-        # Show the stats.
-        cases = population.count(lambda person: person.infected)
-        deaths = population.count(lambda person: not person.alive)
-        vaccinated = population.count(lambda person: person.vaccinated is not None)
-
-        print(day["date"], cases, deaths, vaccinated)
+        print(
+            dict(
+                date=datetime.date.fromisoformat(day["date"]),
+                cases=population.count(lambda person: person.infected),
+                deaths=population.count(lambda person: not person.alive),
+                vaccinated=population.count(
+                    lambda person: person.vaccinated is not None
+                ),
+            )
+        )
 
 
 if __name__ == "__main__":
