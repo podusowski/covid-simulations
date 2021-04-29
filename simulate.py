@@ -64,8 +64,9 @@ def number(cell: str) -> int:
 
 
 def protected(person: Person, today: datetime.date) -> bool:
-    # return person.va
-    return False
+    if person.vaccinated is None:
+        return False
+    return (today - person.vaccinated).days > 14
 
 
 def simulate_single_day(population, data):
@@ -82,7 +83,9 @@ def simulate_single_day(population, data):
     # Infect some people.
     population.affect(
         int(float(data["new_cases"])),
-        lambda person: not person.infected and not protected(person, date),
+        lambda person: person.alive
+        and not person.infected
+        and not protected(person, date),
         lambda person: person._replace(infected=True),
     )
 
@@ -109,6 +112,9 @@ def main():
                 ),
                 vaccinated_but_infected=population.count(
                     lambda person: person.vaccinated is not None and person.infected
+                ),
+                vaccinated_but_died=population.count(
+                    lambda person: person.vaccinated is not None and not person.alive
                 ),
             )
         )
