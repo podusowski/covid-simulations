@@ -1,6 +1,5 @@
 from simulate import Population
 from typing import NamedTuple
-import math
 from math import isclose
 
 

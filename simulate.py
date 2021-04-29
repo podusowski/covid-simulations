@@ -6,7 +6,7 @@ import copy
 import random
 
 
-POPULATION = 37846605
+POPULATION = 37_846_605
 
 
 def read_covid_cases_data():
@@ -108,12 +108,12 @@ def simulate_single_day(population, data):
 
 def main():
     population = Population(size=POPULATION, people_factory=Person)
-    for day in read_covid_cases_data():
-        simulate_single_day(population, day)
+    for data in read_covid_cases_data():
+        simulate_single_day(population, data)
 
         print(
             dict(
-                date=datetime.date.fromisoformat(day["date"]),
+                date=datetime.date.fromisoformat(data["date"]),
                 cases=population.count(lambda person: person.infected),
                 deaths=population.count(lambda person: not person.alive),
                 vaccinated=population.count(
