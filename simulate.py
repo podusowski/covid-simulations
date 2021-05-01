@@ -52,6 +52,33 @@ def simulate_single_day(args, population, data):
     )
 
 
+def plot():
+    # Import lazy because it takes some time.
+    import matplotlib.pyplot as plt
+
+    plt.plot()
+
+
+def simulate(args):
+    data = read_country_data(args.location)
+    population = Population(size=data.population, people_factory=Person)
+    for data in data.reports:
+        simulate_single_day(args, population, data)
+
+        yield dict(
+            date=data.date,
+            cases=population.count(lambda person: person.infected),
+            deaths=population.count(lambda person: not person.alive),
+            vaccinated=population.count(lambda person: person.vaccinated is not None),
+            vaccinated_but_infected=population.count(
+                lambda person: person.vaccinated is not None and person.infected
+            ),
+            vaccinated_but_died=population.count(
+                lambda person: person.vaccinated is not None and not person.alive
+            ),
+        )
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--location", default="Poland")
@@ -60,27 +87,8 @@ def main():
     )
     args = parser.parse_args()
 
-    data = read_country_data(args.location)
-    population = Population(size=data.population, people_factory=Person)
-    for data in data.reports:
-        simulate_single_day(args, population, data)
-
-        pprint(
-            dict(
-                date=data.date,
-                cases=population.count(lambda person: person.infected),
-                deaths=population.count(lambda person: not person.alive),
-                vaccinated=population.count(
-                    lambda person: person.vaccinated is not None
-                ),
-                vaccinated_but_infected=population.count(
-                    lambda person: person.vaccinated is not None and person.infected
-                ),
-                vaccinated_but_died=population.count(
-                    lambda person: person.vaccinated is not None and not person.alive
-                ),
-            )
-        )
+    for report in simulate(args):
+        pprint(report)
 
 
 if __name__ == "__main__":
