@@ -44,7 +44,12 @@ Things that might cause the numbers to be underestimated:
 
 Data
 ----
-The data was taken from https://ourworldindata.org/
+The data was taken from https://ourworldindata.org/ and added to the repository.
+It can be updated with:
+
+```
+wget https://covid.ourworldindata.org/data/owid-covid-data.csv
+```
 
 
 Sample results
