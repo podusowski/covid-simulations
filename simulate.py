@@ -19,7 +19,7 @@ def protected(person: Person, today: datetime.date) -> bool:
     return (today - person.vaccinated).days > 14
 
 
-def simulate_single_day(population, data):
+def simulate_single_day(args, population, data):
     # Kill some infected people.
     population.affect(
         data.deaths,
@@ -36,12 +36,17 @@ def simulate_single_day(population, data):
         lambda person: person._replace(infected=True),
     )
 
+    def should_be_vaccinated(person):
+        return (
+            person.alive
+            and (not person.infected or args.vaccinate_despite_infection)
+            and person.vaccinated is None
+        )
+
     # Vaccinate.
     population.affect(
         data.vaccinations,
-        lambda person: person.alive
-        and not person.infected
-        and person.vaccinated is None,
+        should_be_vaccinated,
         lambda person: person._replace(vaccinated=data.date),
     )
 
@@ -49,12 +54,15 @@ def simulate_single_day(population, data):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--location", default="Poland")
+    parser.add_argument(
+        "--vaccinate-despite-infection", action="store_true", default=False
+    )
     args = parser.parse_args()
 
     data = read_country_data(args.location)
     population = Population(size=data.population, people_factory=Person)
     for data in data.reports:
-        simulate_single_day(population, data)
+        simulate_single_day(args, population, data)
 
         print(
             dict(
