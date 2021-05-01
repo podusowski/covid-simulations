@@ -22,8 +22,9 @@ requirements from `requirements.txt`, it can be started with:
 
 Limitations
 -----------
-There are number of limitations that you should be aware of before interpreting
-any of this.
+There are number of known (and probably some unknown) limitations that you
+should be aware of. Make sure you understand them before interpreting any of
+this.
 
 Things that might cause the numbers to be underestimated:
 
@@ -37,7 +38,8 @@ Things that might cause the numbers to be underestimated:
 
 - By default, infected people are not vaccinated. This is only partially true
   because there might be people who did catch the infection say a day before
-  the vaccination.
+  the vaccination. You can change this behavior to vaccinate despite the 
+  infection by `--vaccinate-despite-infection`.
 
 
 Data
