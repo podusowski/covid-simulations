@@ -35,6 +35,10 @@ Things that might cause the numbers to be underestimated:
   This might paradoxically mean that the vaccinated subpopulation is
   **at first**, more susceptible to severe complication.
 
+- By default, infected people are not vaccinated. This is only partially true
+  because there might be people who did catch the infection say a day before
+  the vaccination.
+
 
 Data
 ----
