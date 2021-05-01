@@ -49,7 +49,11 @@ The data was taken from https://ourworldindata.org/
 
 Sample results
 --------------
+Simulation performed with data from the beginning of the pandemic
+to 28 April 2021:
+
 ![](plots/plot1.png)
 
 This is what happens if we allow infected people to be vaccinated:
+
 ![](plots/plot2.png)
