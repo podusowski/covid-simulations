@@ -10,6 +10,16 @@ runs, and thus creating subpopulations. Randomly picked individuals can be then
 _affected_ (one or more of their features can change) in each simulation cycle.
 
 
+Quick start
+-----------
+The simulation was tested under Ubuntu 20.04 with Python 3.8.5. It can be
+started with:
+
+```
+./simulation.py --location Poland
+```
+
+
 Limitations
 -----------
 There are number of limitations that you should be aware of before interpreting
