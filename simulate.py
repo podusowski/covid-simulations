@@ -1,19 +1,10 @@
 #!/usr/bin/env python3
-import csv
 import datetime
+from owid import number, read_country_data
 from population import Population
 from typing import NamedTuple, Optional
 import itertools
 import argparse
-
-
-def read_country_data(location):
-    with open("owid-covid-data.csv", "r") as f:
-        yield from [row for row in csv.DictReader(f) if row["location"] == location]
-
-
-def number(cell: str) -> int:
-    return int(float(cell)) if cell else 0
 
 
 class Person(NamedTuple):
@@ -64,10 +55,9 @@ def main():
     parser.add_argument("--location", default="Poland")
     args = parser.parse_args()
 
-    it = iter(read_country_data(args.location))
-    first = next(it)
-    population = Population(size=number(first["population"]), people_factory=Person)
-    for data in itertools.chain([first], it):
+    data = read_country_data(args.location)
+    population = Population(size=data.population, people_factory=Person)
+    for data in data.reports:
         simulate_single_day(population, data)
 
         print(
