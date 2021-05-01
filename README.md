@@ -12,8 +12,8 @@ _affected_ (one or more of their features can change) in each simulation cycle.
 
 Quick start
 -----------
-The simulation was tested under Ubuntu 20.04 with Python 3.8.5. It can be
-started with:
+The simulation was tested under Ubuntu 20.04 with Python 3.8.5. After installing
+requirements from `requirements.txt`, it can be started with:
 
 ```
 ./simulation.py --location Poland
