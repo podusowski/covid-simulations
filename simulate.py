@@ -1,10 +1,13 @@
 #!/usr/bin/env python3
 import datetime
+
+from matplotlib.pyplot import title
 from owid import number, read_country_data
 from population import Population
 from typing import NamedTuple, Optional
 import argparse
 from pprint import pprint
+import sys
 
 
 class Person(NamedTuple):
@@ -52,11 +55,35 @@ def simulate_single_day(args, population, data):
     )
 
 
-def plot():
+def plot(args, reports):
     # Import lazy because it takes some time.
     import matplotlib.pyplot as plt
 
-    plt.plot()
+    dates = [report["date"] for report in reports]
+
+    def plot(metric):
+        plt.plot([report[metric] for report in reports], label=metric)
+
+    plt.title(" ".join(sys.argv[1:]))
+
+    plt.subplot(221)
+    plot("cases")
+    plot("vaccinated")
+    plt.legend()
+
+    plt.subplot(222)
+    plot("deaths")
+    plt.legend()
+
+    plt.subplot(223)
+    plot("vaccinated_but_infected")
+    plt.legend()
+
+    plt.subplot(224)
+    plot("vaccinated_but_died")
+    plt.legend()
+
+    plt.savefig(args.plot)
 
 
 def simulate(args):
@@ -85,10 +112,16 @@ def main():
     parser.add_argument(
         "--vaccinate-despite-infection", action="store_true", default=False
     )
+    parser.add_argument("--plot", default=None)
     args = parser.parse_args()
 
-    for report in simulate(args):
-        pprint(report)
+    reports = simulate(args)
+
+    if args.plot:
+        plot(args, list(reports))
+    else:
+        for report in reports:
+            pprint(report)
 
 
 if __name__ == "__main__":
