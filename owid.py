@@ -31,7 +31,7 @@ def read_country_data(location):
             date=datetime.date.fromisoformat(data["date"]),
             deaths=number(data["new_deaths"]),
             cases=number(data["new_cases"]),
-            vaccinations2=vaccinations,
+            vaccinations=vaccinations,
         )
 
     reports = [
