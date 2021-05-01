@@ -20,32 +20,29 @@ def protected(person: Person, today: datetime.date) -> bool:
 
 
 def simulate_single_day(population, data):
-    # print(data)
-    date = datetime.date.fromisoformat(data["date"])
-
     # Kill some infected people.
     population.affect(
-        number(data["new_deaths"]),
+        data.deaths,
         lambda person: person.alive and person.infected,
         lambda person: person._replace(alive=False),
     )
 
     # Infect some people.
     population.affect(
-        number(data["new_cases"]),
+        data.cases,
         lambda person: person.alive
         and not person.infected
-        and not protected(person, date),
+        and not protected(person, data.date),
         lambda person: person._replace(infected=True),
     )
 
     # Vaccinate.
     population.affect(
-        number(data["new_vaccinations"]),
+        data.vaccinations,
         lambda person: person.alive
         and not person.infected
         and person.vaccinated is None,
-        lambda person: person._replace(vaccinated=date),
+        lambda person: person._replace(vaccinated=data.date),
     )
 
 
@@ -61,7 +58,7 @@ def main():
 
         print(
             dict(
-                date=datetime.date.fromisoformat(data["date"]),
+                date=data.date,
                 cases=population.count(lambda person: person.infected),
                 deaths=population.count(lambda person: not person.alive),
                 vaccinated=population.count(

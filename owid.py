@@ -1,5 +1,6 @@
 """Our World In Data importer."""
 import csv
+import datetime
 from types import SimpleNamespace
 import itertools
 
@@ -13,7 +14,16 @@ def read_country_data(location):
     first = next(it)
     population = number(first["population"])
 
-    return SimpleNamespace(population=population, reports=itertools.chain([first], it))
+    def report(data):
+        return SimpleNamespace(
+            date=datetime.date.fromisoformat(data["date"]),
+            deaths=number(data["new_deaths"]),
+            cases=number(data["new_cases"]),
+            vaccinations=number(data["new_vaccinations"])
+        )
+
+    reports = [report(data) for data in itertools.chain([first], it)]
+    return SimpleNamespace(population=population, reports=reports)
 
 
 def number(cell: str) -> int:
