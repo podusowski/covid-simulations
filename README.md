@@ -44,7 +44,9 @@ Things that might cause the numbers to be underestimated:
 
 Data
 ----
-The data was taken from https://ourworldindata.org/ and added to the repository.
+The data about daily cases, deaths and vaccinations was taken from
+https://ourworldindata.org/ and added to the repository.
+
 It can be updated with:
 
 ```
