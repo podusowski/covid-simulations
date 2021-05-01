@@ -45,3 +45,11 @@ Things that might cause the numbers to be underestimated:
 Data
 ----
 The data was taken from https://ourworldindata.org/
+
+
+Sample results
+--------------
+![](plots/plot1.png)
+
+This is what happens if we allow infected people to be vaccinated:
+![](plots/plot2.png)
