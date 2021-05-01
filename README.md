@@ -30,13 +30,12 @@ this.
 
 Things that might cause the numbers to be underestimated:
 
-- For the program, a _protected_ (one that cannot be infected) person is
-  everyone two weeks after the first dose of the vaccine.
+- For the program, a _protected_ person is everyone two weeks after the first
+  dose of the vaccine. In other words, no one can be infected two weeks after
+  vaccination, which obviously isn't the case in the real world.
 
 - In many countries, people in the high risk groups were prioritized to take
-  the jabs first, making them overrepresented in the vaccinated subpopulation.
-  This might paradoxically mean that the vaccinated subpopulation is
-  **at first**, more susceptible to severe complication.
+  jabs first, making them overrepresented in the vaccinated subpopulation.
 
 - By default, infected people are not vaccinated. This is only partially true
   because there might be people who did catch the infection say a day before
