@@ -4,6 +4,7 @@ from owid import number, read_country_data
 from population import Population
 from typing import NamedTuple, Optional
 import argparse
+from pprint import pprint
 
 
 class Person(NamedTuple):
@@ -64,7 +65,7 @@ def main():
     for data in data.reports:
         simulate_single_day(args, population, data)
 
-        print(
+        pprint(
             dict(
                 date=data.date,
                 cases=population.count(lambda person: person.infected),
