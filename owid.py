@@ -15,16 +15,23 @@ def read_country_data(location):
     first = next(it)
     population = number(first["population"])
 
+    last_known_vaccinated_people_number = 0
+
     def report(prev, data):
-        vaccinations = number(data["people_vaccinated"]) - number(
-            prev["people_vaccinated"]
-        )
+        nonlocal last_known_vaccinated_people_number
+
+        # Need to do some gymantics here as "new_vaccinations" includes both doses. 
+        # Additionally, some of "people_vaccinated" cells are empty.
+        vaccinations = 0
+        if data["people_vaccinated"]:
+            vaccinations = number(data["people_vaccinated"]) - last_known_vaccinated_people_number
+            last_known_vaccinated_people_number = number(data["people_vaccinated"])
+
         return SimpleNamespace(
             date=datetime.date.fromisoformat(data["date"]),
             deaths=number(data["new_deaths"]),
             cases=number(data["new_cases"]),
-            vaccinations=number(data["new_vaccinations"]),
-            vaccinations2=vaccinations
+            vaccinations2=vaccinations,
         )
 
     reports = [
