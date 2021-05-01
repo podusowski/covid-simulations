@@ -1,5 +1,5 @@
-This COVID-19 simulation is trying to asses how many vaccinated people might
-still get infected and die before the immunity system fully kicks in.
+This COVID-19 simulation tries to asses how many vaccinated people might still
+get infected and die before the immunity system fully kicks in.
 
 
 Limitations
@@ -12,9 +12,10 @@ Things that might cause the numbers to be underestimated:
 - For the program, a _protected_ (one that cannot be infected) person is
   everyone two weeks after the first dose of the vaccine.
 
-- In many countries, people in the risk groups were prioritized to take the jabs
-  first. This means that these people were overrepresented in the vaccinated
-  subpopulation.
+- In many countries, people in the high risk groups were prioritized to take
+  the jabs first, making them overrepresented in the vaccinated subpopulation.
+  This might paradoxically mean that the vaccinated subpopulation is
+  **at first**, more susceptible to severe complication.
 
 
 Data
