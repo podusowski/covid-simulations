@@ -3,7 +3,6 @@ import datetime
 from owid import number, read_country_data
 from population import Population
 from typing import NamedTuple, Optional
-import itertools
 import argparse
 
 
