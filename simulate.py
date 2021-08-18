@@ -23,7 +23,7 @@ def protected(person: Person, today: datetime.date) -> bool:
     return (today - person.vaccinated).days > 14
 
 
-def simulate_single_day(args, population, data):
+def simulate_single_day(args, population: Population, data):
     # Kill some infected people.
     population.affect(
         data.deaths,
