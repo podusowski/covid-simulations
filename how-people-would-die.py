@@ -70,6 +70,7 @@ def plot(args, reports):
 def simulate(args):
     data = read_country_data(args.location)
     population = Population(size=data.population, people_factory=Person)
+    print(population.count(lambda _: True))
     for data in data.reports:
         sys.stderr.write(".")
         sys.stderr.flush()
