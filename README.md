@@ -16,7 +16,7 @@ The simulation was tested under Ubuntu 20.04 with Python 3.8.5. After installing
 requirements from `requirements.txt`, it can be started with:
 
 ```
-./simulation.py --location Poland --plot plot.png
+./simulate.py --location Poland --plot plot.png
 ```
 
 `--plot` can be skipped to see the raw computed data instead.
