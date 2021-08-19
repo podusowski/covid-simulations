@@ -1,19 +1,32 @@
-This COVID-19 simulation tries to asses how many vaccinated people might still
-get infected and die before the immunity system fully kicks in.
-
-
 How does it work
 ----------------
+The simulation is written in Python and it was tested under Ubuntu 20.04 with
+Python 3.8.5. `requirements.txt` contains a list of dependencies.
+
 The basic building block o the simulation is a model of a population.
 Individuals in a population have features which can evolve as the summation
 runs, and thus creating subpopulations. Randomly picked individuals can be then
 _affected_ (one or more of their features can change) in each simulation cycle.
 
 
-Quick start
------------
-The simulation was tested under Ubuntu 20.04 with Python 3.8.5. After installing
-requirements from `requirements.txt`, it can be started with:
+Data
+----
+The data about daily cases, deaths and vaccinations was taken from
+https://ourworldindata.org/ and added to the repository.
+
+It can be updated with:
+
+```
+wget https://covid.ourworldindata.org/data/owid-covid-data.csv
+```
+
+
+How many people we expect to get infected after vaccination?
+------------------------------------------------------------
+This COVID-19 simulation tries to asses how many vaccinated people might still
+get infected and die before the immunity system fully kicks in.
+
+It can be started by:
 
 ```
 ./simulate.py --location Poland --plot plot.png
@@ -22,8 +35,6 @@ requirements from `requirements.txt`, it can be started with:
 `--plot` can be skipped to see the raw computed data instead.
 
 
-Limitations
------------
 There are number of known (and probably some unknown) limitations that you
 should be aware of. Make sure you understand them before interpreting any of
 this.
@@ -43,20 +54,6 @@ Things that might cause the numbers to be underestimated:
   infection by `--vaccinate-despite-infection`.
 
 
-Data
-----
-The data about daily cases, deaths and vaccinations was taken from
-https://ourworldindata.org/ and added to the repository.
-
-It can be updated with:
-
-```
-wget https://covid.ourworldindata.org/data/owid-covid-data.csv
-```
-
-
-Sample results
---------------
 Simulation performed with data from the beginning of the pandemic
 to 28 April 2021:
 
@@ -65,3 +62,4 @@ to 28 April 2021:
 This is what happens if we allow infected people to be vaccinated:
 
 ![](plots/plot2.png)
+
