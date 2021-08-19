@@ -38,6 +38,16 @@ Dates for both events are recoded for each affected person and two sets are
 built out of them: people who died within a week after taking a vaccine and
 people who died next day after.
 
+The simulation can be started with:
+
+```
+./how-people-would-die.py --plot plot.png
+```
+
+These are the result for a simulation For the OWID data up to 17 Aug 2021:
+
+![](plots/how-people-would-die.png)
+
 
 How many people are expected to get infected after vaccination?
 ---------------------------------------------------------------

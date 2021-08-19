@@ -36,10 +36,20 @@ def plot(args, reports):
     # Import lazy because it takes some time.
     import matplotlib.pyplot as plt
 
+    plt.style.use("ggplot")
+
     dates = [report["date"] for report in reports]
 
     def plot(metric):
         plt.plot([report[metric] for report in reports], label=metric)
+        last_value = reports[-1][metric]
+        plt.annotate(
+            str(last_value),
+            xy=(1, last_value),
+            xytext=(8, 0),
+            xycoords=("axes fraction", "data"),
+            textcoords="offset points",
+        )
 
     plt.title(" ".join(sys.argv[1:]))
 
