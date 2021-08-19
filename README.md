@@ -21,8 +21,26 @@ wget https://covid.ourworldindata.org/data/owid-covid-data.csv
 ```
 
 
-How many people we expect to get infected after vaccination?
-------------------------------------------------------------
+How many people would die even after getting a shot of NaCl solution?
+---------------------------------------------------------------------
+While it is obvious that no vaccine makes you immortal and therefore some
+vaccinated people will die shorty after getting a shot. This simulation tries
+to estimate a number of such occurrences to see whether number of serious
+adverse events can be based on the time correlation alone.
+
+The algorithm works as follow. First, it constructs a virtual population of around 40M
+people. Then, for each day the data exists for, it randomly picks two groups of
+people. First group is getting vaccinated and the second dies. Number of
+vaccinated people is taken from OWID data, and number of people who die is
+always 1000, which is a understated number of daily deaths in Poland.
+
+Dates for both events are recoded for each affected person and two sets are
+built out of them: people who died within a week after taking a vaccine and
+people who died next day after.
+
+
+How many people are expected to get infected after vaccination?
+---------------------------------------------------------------
 This COVID-19 simulation tries to asses how many vaccinated people might still
 get infected and die before the immunity system fully kicks in.
 
