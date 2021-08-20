@@ -23,6 +23,8 @@ wget https://covid.ourworldindata.org/data/owid-covid-data.csv
 
 How many people would die even after getting a shot of NaCl solution?
 ---------------------------------------------------------------------
+**Summary: Considerable number of time-correlated deaths are expected, but vaccine is not the cause.**
+
 While it is obvious that no vaccine makes you immortal and therefore some
 vaccinated people will die shorty after getting a shot. This simulation tries
 to estimate a number of such occurrences to see whether number of serious
@@ -44,7 +46,7 @@ The simulation can be started with:
 ./how-people-would-die.py --plot plot.png
 ```
 
-These are the result for a simulation For the OWID data up to 17 Aug 2021:
+These are the result for a simulation for the OWID data up to 17 Aug 2021:
 
 ![](plots/how-people-would-die.png)
 
