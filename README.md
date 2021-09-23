@@ -21,8 +21,8 @@ wget https://covid.ourworldindata.org/data/owid-covid-data.csv
 ```
 
 
-How many people would die even after getting a shot of NaCl solution?
----------------------------------------------------------------------
+How many time-correlated deaths are expected during a vaccination campain?
+--------------------------------------------------------------------------
 **Summary: Considerable number of time-correlated deaths are expected, but vaccine is not the cause.**
 
 While it is obvious that no vaccine makes you immortal and therefore some
